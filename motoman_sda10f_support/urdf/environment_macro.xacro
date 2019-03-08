@@ -1,7 +1,11 @@
 <?xml version="1.0" ?>
 <model xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:include filename="$(find motoman_sda10f_support)/urdf/zed_macro.xacro"/><!-- ZED camera -->
 	<xacro:macro name="environment" params="name prefix">
-	
+	<xacro:zed_camera prefix=""/>
+
+
+
 		<!-- link list -->
 	<link name="conveyor">
 		<visual>
@@ -57,7 +61,7 @@
 		</visual>
 </link>
 
-	<link name="table">
+	<!--link name="table">
 		<visual>
 			<geometry>
 				<mesh filename="package://motoman_sda10f_support/meshes/environment/table.STL"/>
@@ -68,9 +72,9 @@
 				<texture filename="package://motoman_sda10f_support/meshes/environment/textures/beige.png"/>
 			</material>
 		</visual>
-</link>
+</link-->
 
-	<link name="worktable">
+	<!--link name="worktable">
 		<visual>
 			<geometry>
 				<mesh filename="package://motoman_sda10f_support/meshes/environment/worktable.STL" scale="0.001 0.001 0.001"/>
@@ -80,7 +84,21 @@
 				<color rgba="${45/255} ${135/255} ${149/255} 1"/>
 			</material>
 		</visual>
+</link-->
+
+	<link name="worktable">
+		<visual>
+			<geometry>
+				<mesh filename="package://motoman_sda10f_support/meshes/environment/table_new.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+			<origin xyz="0 0 0"/>
+			<material name="gray_conveyor">
+				<texture filename="package://motoman_sda10f_support/meshes/environment/textures/red.png"/>
+			</material>
+		</visual>
+
 </link>
+
 
 	<link name="beacon">
 		<visual>
@@ -106,7 +124,7 @@
 		</visual>
 </link-->
 
-	<link name="mps">
+	<!--link name="mps">
 		<visual>
 			<geometry>
 				<mesh filename="package://motoman_sda10f_support/meshes/environment/MPS.STL"/>
@@ -122,9 +140,9 @@
 				</geometry>
 				<origin xyz= "-0.7 0 -1.40"/>
 		</collision>
-</link>
+</link-->
 
-	<!--link name="MPS_FAKE">
+	<link name="MPS_FAKE">
 		<visual>
 			<geometry>
 				<mesh filename="package://motoman_sda10f_support/meshes/environment/MPS_FAKE.stl" scale="0.008 0.008 0.008"/>
@@ -134,7 +152,7 @@
 				<color rgba="${168/255} ${224/255} ${198/255} 1"/>
 			</material>
 		</visual>
-</link-->
+</link>
 
 		<!-- joint list -->
 	<joint name="coveyor_to_robot" type="fixed">
@@ -168,17 +186,24 @@
 		<origin xyz="1.11 0 0" rpy="0 0 0"/>
 	</joint>
 	
-	<joint name="table_to_robot" type="fixed">
+	<!--joint name="table_to_robot" type="fixed">
 		<parent link="torso_base_link"/>
 		<child link="table"/>
-		<origin xyz="0.7 0 -0.3" rpy="1.571 0 -1.571"/>
-	</joint>
+		<origin xyz="0.7 0 -0.34" rpy="1.571 0 -1.571"/> 
+	</joint-->
 	
-	<joint name="worktable_to_robot" type="fixed">
+	<!--joint name="worktable_to_robot" type="fixed">
 		<parent link="table"/>
 		<child link="worktable"/>
 		<origin xyz="0 1.28 -0.76" rpy="0 0 0"/>
-	</joint>
+	</joint-->
+
+	<joint name="worktable_to_robot" type="fixed">
+		<parent link="torso_base_link"/>
+		<child link="worktable"/>
+		<origin xyz="0.52 0 0.29" rpy="0 0  1.57"/>
+	</joint>	
+
 	
 	<joint name="beacon_to_robot" type="fixed">
 		<parent link="torso_link_b1"/>
@@ -192,20 +217,30 @@
 		<origin xyz="-0.53 -0.54 -0.3" rpy="1.571 0 1.571"/>
 	</joint-->
 	
-		<joint name="mps_to_robot" type="fixed">
+		<!--joint name="mps_to_robot" type="fixed">
 		<parent link="torso_base_link"/>
 		<child link="mps"/>
-		<origin xyz="-0.111 -1.405 -0.3" rpy="1.571 0 1.571"/> <!--Sumo 5cm a las MPS por si acaso-->
-	</joint>
-	
-		<!--joint name="MPS_FAKE_to_robot" type="fixed">
-		<parent link="torso_base_link"/>
-		<child link="MPS_FAKE"/>
-		<origin xyz="-1.35 0.6 -0.3" rpy="0 0 -1.5708"/--> <!--Sumo 5cm a las MPS por si acaso-->
+		<origin xyz="-0.111 -1.405 -0.3" rpy="1.571 0 1.571"/--> <!--Sumo 5cm a las MPS por si acaso-->
 	<!--/joint-->
 	
-		<!-- end of joint list -->
+	<joint name="MPS_FAKE_to_robot" type="fixed">
+		<parent link="torso_base_link"/>
+		<child link="MPS_FAKE"/>
+		<origin xyz="-1.35 0.6 -0.3" rpy="0 0 -1.5708"/> <!--Sumo 5cm a las MPS por si acaso-->
+	</joint>
+
+	<!-- Camera zed -->
+
+	<joint name="zed_camera" type="fixed">
+		<parent link="torso_base_link" />
+		<child link = "zed_camera_center" />
+		<origin xyz="0 0 3" rpy="0 1.57 0" />
+	</joint>
 	
+		<!-- end of joint list -->
+
+
+		
 	</xacro:macro>
 	
 	<xacro:environment name="environment" prefix="environment_"/>
